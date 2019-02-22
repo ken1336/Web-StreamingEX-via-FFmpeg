@@ -140,6 +140,10 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="cMain.cpp" />
+    <ClCompile Include="tcp_net.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="net.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

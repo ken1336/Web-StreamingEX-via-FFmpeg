@@ -35,6 +35,8 @@ extern "C" //FFmpeg가 C라이브러리이기 때문에 이부분이 필요하다.
 
 
 #include "libavutil/timestamp.h"
+#include "libavformat/avio.h""
+#include"libavutil/file.h"
 
 
 
@@ -47,43 +49,26 @@ extern "C" //FFmpeg가 C라이브러리이기 때문에 이부분이 필요하다.
 #include <math.h>
 #include<stdint.h>
 #include "SDL/SDL.h"
-//#include "SDL/SDL_thread.h"
+#include "SDL/SDL_thread.h"
+#include"net.h"
 
-//
-//static AVFormatContext *fmt_ctx = NULL;
-//static AVCodecContext *dec_ctx = NULL;
-//AVCodec *dec;
-//static int vst_idx = -1;
-//const char* filename = "C:\\Users\\ken13\\Desktop\\media\\Sample.mp4";
 
-void open_input_file()
+static int read_packet(void *opaque, uint8_t *buf, int buf_size)
 {
-
-
-	///* open input streams */
-	//avformat_open_input(&fmt_ctx, filename, NULL, NULL);
-
-	///* select the video stream */
-	//vst_idx = av_find_best_stream(fmt_ctx, AVMEDIA_TYPE_VIDEO, -1, -1, &dec, 0);
-	//dec_ctx = fmt_ctx->streams[vst_idx]->codec;
-
-	///* init the video decoder */
-	//avcodec_open2(dec_ctx, dec, NULL);
+	struct tcpio_stream *bd = (tcpio_stream *)opaque;
+	buf_size = FFMIN(buf_size, bd->buffer.size);
+	if (!buf_size)
+		return AVERROR_EOF;
+	printf("ptr:%p size:%zu\n", bd->buffer.ptr, bd->buffer.size);
+	recv(bd->socket, (char*)bd->buffer.ptr, bd->buffer.size, 0);
+	/* copy internal buffer data to buf */
+	memcpy(buf, bd->buffer.ptr, buf_size);
+	bd->buffer.ptr += buf_size;
+	bd->buffer.size -= buf_size;
+	return buf_size;
 }
 
-void close_input_file()
-{
 
-	/*for (int i = 0; i < fmt_ctx->nb_streams; i++) {
-		AVStream *st = fmt_ctx->streams[i];
-		avcodec_close(st->codec);
-	}
-	avformat_close_input(&fmt_ctx);*/
-}
-
-void encode_video()
-{
-}
 #if LIBAVCODEC_VERSION_INT < AV_VERSION_INT(55,28,1)
 #define av_frame_alloc avcodec_alloc_frame
 #define av_frame_free avcodec_free_frame
@@ -109,9 +94,25 @@ int main(int argc, char *argv[]) {
 		fprintf(stderr, "Could not initialize SDL - %s\n", SDL_GetError());
 		exit(1);
 	}
-	printf("net: %d\n", avformat_network_init());
 
-	if (avformat_open_input(&fmt_ctx, "tcp://127.0.0.1:8888", NULL, NULL) != 0) {
+	////////////////////////////////
+	printf("net: %d\n", avformat_network_init());
+	struct buffer_data bd = { 0 };
+	AVIOContext *avio_ctx = NULL;
+	uint8_t *buffer = NULL, *avio_ctx_buffer = NULL;
+	size_t buffer_size, avio_ctx_buffer_size = 4096;
+
+	
+	tcpio_stream* stream = custom_tcp_open((char*)"127.0.0.1", 8888);
+	avio_ctx = avio_alloc_context(avio_ctx_buffer, avio_ctx_buffer_size,
+		0, stream, &read_packet, NULL, NULL);
+	fmt_ctx->pb = avio_ctx;
+	/////////////////////////////////
+
+
+	
+
+	if (avformat_open_input(&fmt_ctx, "", NULL, NULL) != 0) {
 		printf("IO ERROR!\n");
 		return -1;
 	}
