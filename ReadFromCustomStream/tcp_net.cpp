@@ -1,7 +1,7 @@
 #include"net.h"
 
 
-tcpio_stream* custom_tcp_open(char* ip, int port) {
+tcpio_stream* custom_tcp_open(char* ip, int port, buffer_data* buf) {
 	WSADATA wasData;
 	SOCKADDR_IN servAddr;
 	SOCKET hSocket;
@@ -35,13 +35,15 @@ tcpio_stream* custom_tcp_open(char* ip, int port) {
 	//MessageBox(NULL, L"connection on", L"good", MB_OK);
 
 	//send(hSocket, sendBuf, 10, 0);
-	printf("connection on");
+	printf("connection on\n");
 
 
 	tcpio_stream *stream = (tcpio_stream*)malloc(sizeof(tcpio_stream));
-	stream->buffer.ptr = 0;
-	stream->buffer.size = 32*4096;
+	stream->buffer = buf;
+	stream->buffer->ptr = (uint8_t*)malloc(stream->buffer->size);
 	stream->socket = hSocket;
+
+	
 	return stream;
 }
 

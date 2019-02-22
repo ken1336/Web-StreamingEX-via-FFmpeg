@@ -13,8 +13,8 @@ typedef struct buffer_data {
 }buffer_data;
 
 typedef struct tcpio_stream {
-	buffer_data buffer;
+	buffer_data *buffer;
 	SOCKET socket;
 }tcpio_stream;
-tcpio_stream* custom_tcp_open(char* ip, int port);
+tcpio_stream* custom_tcp_open(char* ip, int port, buffer_data* buf);
 int custom_tcp_close(tcpio_stream* stream);

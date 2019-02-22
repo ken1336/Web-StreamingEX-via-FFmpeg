@@ -56,18 +56,22 @@ extern "C" //FFmpeg가 C라이브러리이기 때문에 이부분이 필요하다.
 static int read_packet(void *opaque, uint8_t *buf, int buf_size)
 {
 	struct tcpio_stream *bd = (tcpio_stream *)opaque;
-	buf_size = FFMIN(buf_size, bd->buffer.size);
+	//printf("buffer ptr: %d		buffer size: %d		buf_size:%d\n", bd->buffer->ptr, bd->buffer->size,buf_size);
+	buf_size = FFMIN(buf_size, bd->buffer->size);
 	if (!buf_size)
 		return AVERROR_EOF;
-	printf("ptr:%p size:%zu\n", bd->buffer.ptr, bd->buffer.size);
-	recv(bd->socket, (char*)bd->buffer.ptr, bd->buffer.size, 0);
+	//printf("ptr:%p size:%zu\n", bd->buffer->ptr, bd->buffer->size);
+	recv(bd->socket, (char*)bd->buffer->ptr, bd->buffer->size, 0);
 	/* copy internal buffer data to buf */
-	memcpy(buf, bd->buffer.ptr, buf_size);
-	bd->buffer.ptr += buf_size;
-	bd->buffer.size -= buf_size;
+	memcpy(buf, bd->buffer->ptr, buf_size);
+	bd->buffer->ptr += buf_size;
+	bd->buffer->size -= buf_size;
 	return buf_size;
 }
 
+static int seek(void *opaque, int64_t offset, int whence) {
+
+}
 
 #if LIBAVCODEC_VERSION_INT < AV_VERSION_INT(55,28,1)
 #define av_frame_alloc avcodec_alloc_frame
@@ -97,15 +101,32 @@ int main(int argc, char *argv[]) {
 
 	////////////////////////////////
 	printf("net: %d\n", avformat_network_init());
-	struct buffer_data bd = { 0 };
+	
 	AVIOContext *avio_ctx = NULL;
 	uint8_t *buffer = NULL, *avio_ctx_buffer = NULL;
-	size_t buffer_size, avio_ctx_buffer_size = 4096;
+	size_t buffer_size = 1, avio_ctx_buffer_size = 32*1024*1024;
+	struct buffer_data bd = { 0 };
+	int ret;
+	if (!(fmt_ctx = avformat_alloc_context())) {
+		printf("format context alloctaion error!\n");
+		exit(-1);
+	}
 
-	
-	tcpio_stream* stream = custom_tcp_open((char*)"127.0.0.1", 8888);
-	avio_ctx = avio_alloc_context(avio_ctx_buffer, avio_ctx_buffer_size,
+
+	avio_ctx_buffer = (uint8_t*)av_malloc(avio_ctx_buffer_size);
+	if (!avio_ctx_buffer) {
+		ret = AVERROR(ENOMEM);
+		printf("avio_ctx_buffer alloctaion error!\n");
+		exit(-1);
+	}
+	//buffer = 0;
+	bd.ptr = 0;
+	bd.size = avio_ctx_buffer_size;
+
+	tcpio_stream* stream = custom_tcp_open((char*)"127.0.0.1", 8888,&bd);
+	avio_ctx = avio_alloc_context(avio_ctx_buffer, buffer_size,
 		0, stream, &read_packet, NULL, NULL);
+	
 	fmt_ctx->pb = avio_ctx;
 	/////////////////////////////////
 
@@ -122,7 +143,7 @@ int main(int argc, char *argv[]) {
 	if (avformat_find_stream_info(fmt_ctx, NULL) < 0)
 		return -1; // Couldn't find stream information
 
-	av_dump_format(fmt_ctx, 0, filename, 0);
+	//av_dump_format(fmt_ctx, 0, filename, 0);
 
 
 	vst_idx = -1;
@@ -207,10 +228,10 @@ int main(int argc, char *argv[]) {
 
 
 
-	const char* outfile = "C:\\Users\\ken13\\Desktop\\media\\testsample";
+	const char* outfile = "C:\\Users\\ken13\\Desktop\\media\\testsample.mp4";
 	AVOutputFormat * outFmt = NULL;
 	AVFormatContext *outFmtCtx = NULL;
-	avformat_alloc_output_context2(&outFmtCtx, outFmt, "hls", outfile);
+	avformat_alloc_output_context2(&outFmtCtx, outFmt, "mp4", outfile);
 	AVStream * outStrm = avformat_new_stream(outFmtCtx, enc_ctx->codec);
 
 	printf("%s\n", outFmtCtx->oformat->name);
