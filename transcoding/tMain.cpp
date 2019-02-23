@@ -111,7 +111,7 @@ int main(int argc, char *argv[]) {
 	}
 	printf("net: %d\n", avformat_network_init());
 	
-	if (avformat_open_input(&fmt_ctx, "tcp://127.0.0.1:8888", NULL, NULL) != 0) {
+	if (avformat_open_input(&fmt_ctx, filename, NULL, NULL) != 0) {
 		printf("IO ERROR!\n");
 		return -1;
 	}
@@ -235,7 +235,8 @@ int main(int argc, char *argv[]) {
 
 
 
-
+	///init SDL////////
+	
 	// set up YV12 pixel array (12 bits per pixel)
 	
 	int size = 0;
@@ -249,39 +250,26 @@ int main(int argc, char *argv[]) {
 			/* decode the frame */
 			printf("decode size: %d\n", avcodec_decode_video2(dec_ctx, frm, &got_frame, &pkt));
 			if (got_frame) {
-				
-				
+
+
 
 				//av_frame_make_writable(frm);
 				int gg;
 				avcodec_encode_video2(enc_ctx, outpkt1, frm, &gg);
-				
+
 				if (gg) {
 					printf("write%d\n", outpkt1->size);
 					av_write_frame(outFmtCtx, outpkt1);
-					
+
 					size += outpkt1->size;
 					av_init_packet(outpkt1);
 					//av_free_packet(outpkt1);
 				}
-					
-					
-				
-			/*	int ret = avcodec_send_frame(enc_ctx, frm);
-				while (ret >= 0) {
 
-					ret = avcodec_receive_packet(enc_ctx, outpkt1);
-				}
-				printf("write%d\n", outpkt1->size);
-				av_write_frame(outFmtCtx, outpkt1);
-				av_free_packet(outpkt1);*/
-			}
-			/*int ret = avcodec_send_frame(dec_ctx, frm);
-			while (ret >= 0) {
 
-				ret = avcodec_receive_packet(dec_ctx, &pkt);
+
 			}
-			printf("frame size: %d\n",pkt.size);*/
+			
 			
 			
 
@@ -290,6 +278,8 @@ int main(int argc, char *argv[]) {
 		}
 		av_free_packet(outpkt1);
 		av_free_packet(&pkt);
+		
+
 
 	}
 	//av_init_packet(&outpkt);

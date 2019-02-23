@@ -9,6 +9,7 @@
 
 typedef struct buffer_data {
 	uint8_t *ptr;
+	uint8_t *pre;
 	size_t size; ///< size left in the buffer
 }buffer_data;
 

@@ -73,9 +73,18 @@ int main(int argc, char *argv[]) {
 	size_t yPlaneSz, uvPlaneSz;
 	int uvPitch;
 
+	const char* filename = "C:\\Users\\ken13\\Desktop\\media\\Sample.mp4";
 	if (argc < 2) {
-		fprintf(stderr, "Usage: test <file>\n");
-		exit(1);
+		// Open video file
+		fprintf(stderr, "Usage: test <C:\\Users\\ken13\\Desktop\\media\\Sample.mp4>\n");
+		if (avformat_open_input(&pFormatCtx, filename, NULL, NULL) != 0)
+			return -1; // Couldn't open file
+		//exit(1);
+	}
+	else {
+		// Open video file
+		if (avformat_open_input(&pFormatCtx, argv[1], NULL, NULL) != 0)
+			return -1; // Couldn't open file
 	}
 	// Register all formats and codecs
 	av_register_all();
@@ -86,8 +95,8 @@ int main(int argc, char *argv[]) {
 	}
 
 	// Open video file
-	if (avformat_open_input(&pFormatCtx, argv[1], NULL, NULL) != 0)
-		return -1; // Couldn't open file
+	//if (avformat_open_input(&pFormatCtx, filename, NULL, NULL) != 0)
+	//	return -1; // Couldn't open file
 	
 	// Retrieve stream information
 	if (avformat_find_stream_info(pFormatCtx, NULL) < 0)		
@@ -180,8 +189,10 @@ int main(int argc, char *argv[]) {
 	}
 
 	// initialize SWS context for software scaling
-	printf("%d	%d	%d	%d", pCodecCtx->width, pCodecCtx->height,
+	printf("%d	%d	%d	%d	%d\n", pCodecCtx->width, pCodecCtx->height,
 		pCodecCtx->pix_fmt, pCodecCtx->width, pCodecCtx->height);
+	
+	
 	sws_ctx = sws_getContext(pCodecCtx->width, pCodecCtx->height,
 		pCodecCtx->pix_fmt, pCodecCtx->width, pCodecCtx->height,
 		AV_PIX_FMT_YUV420P,
@@ -208,7 +219,8 @@ int main(int argc, char *argv[]) {
 		printf("%d	%d\n", packet.size,packet.stream_index);
 		if (packet.stream_index == videoStream) {
 			// Decode video frame
-			avcodec_decode_video2(pCodecCtx, pFrame, &frameFinished, &packet);
+			printf("decode size: %d\n", avcodec_decode_video2(pCodecCtx, pFrame, &frameFinished, &packet));
+			//avcodec_decode_video2(pCodecCtx, pFrame, &frameFinished, &packet);
 
 			// Did we get a video frame?
 			if (frameFinished) {
@@ -219,7 +231,7 @@ int main(int argc, char *argv[]) {
 				pict.linesize[0] = pCodecCtx->width;
 				pict.linesize[1] = uvPitch;
 				pict.linesize[2] = uvPitch;
-				printf("frame size:%d\n",pFrame->linesize);
+				printf("frame size:%d\n",pFrame->pkt_size);
 				// Convert the image into YUV format that SDL uses
 				sws_scale(sws_ctx, (uint8_t const * const *)pFrame->data,
 					pFrame->linesize, 0, pCodecCtx->height, pict.data,

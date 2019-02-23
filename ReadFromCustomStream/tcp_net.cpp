@@ -41,6 +41,7 @@ tcpio_stream* custom_tcp_open(char* ip, int port, buffer_data* buf) {
 	tcpio_stream *stream = (tcpio_stream*)malloc(sizeof(tcpio_stream));
 	stream->buffer = buf;
 	stream->buffer->ptr = (uint8_t*)malloc(stream->buffer->size);
+	stream->buffer->pre = stream->buffer->ptr;
 	stream->socket = hSocket;
 
 	
