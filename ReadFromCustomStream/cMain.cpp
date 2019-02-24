@@ -51,10 +51,12 @@ extern "C" //FFmpeg가 C라이브러리이기 때문에 이부분이 필요하다.
 #include "SDL/SDL.h"
 #include "SDL/SDL_thread.h"
 #include"net.h"
-
+#define __MIN_SCREEN
 
 static int read_packet(void *opaque, uint8_t *buf, int buf_size)
 {
+
+	
 	struct tcpio_stream *bd = (tcpio_stream *)opaque;
 	//printf("buffer ptr: %d		buffer size: %d		buf_size:%d\n", bd->buffer->ptr, bd->buffer->size,buf_size);
 	buf_size = FFMIN(buf_size, bd->buffer->size);
@@ -345,38 +347,41 @@ int main(int argc, char *argv[]) {
 			/* decode the frame */
 			ret = avcodec_decode_video2(dec_ctx, frm, &got_frame, &pkt);
 		//	printf("decode size: %d\n",ret );
-
+#ifdef __MIN_SCREEN
 			if (got_frame) {
-				//AVPicture pict;
-				//pict.data[0] = yPlane;
-				//pict.data[1] = uPlane;
-				//pict.data[2] = vPlane;
-				//pict.linesize[0] = dec_ctx->width;
-				//pict.linesize[1] = uvPitch;
-				//pict.linesize[2] = uvPitch;
-				//
-				////printf("frame size:%d		total:%d\n", frm->pkt_size,size+=frm->pkt_size);
-				//// Convert the image into YUV format that SDL uses
-				//sws_scale(sws_ctx, (uint8_t const * const *)frm->data,
-				//	frm->linesize, 0, dec_ctx->height, pict.data,
-				//	pict.linesize);
+				AVPicture pict;
+				pict.data[0] = yPlane;
+				pict.data[1] = uPlane;
+				pict.data[2] = vPlane;
+				pict.linesize[0] = dec_ctx->width;
+				pict.linesize[1] = uvPitch;
+				pict.linesize[2] = uvPitch;
+				
+				//printf("frame size:%d		total:%d\n", frm->pkt_size,size+=frm->pkt_size);
+				// Convert the image into YUV format that SDL uses
+				sws_scale(sws_ctx, (uint8_t const * const *)frm->data,
+					frm->linesize, 0, dec_ctx->height, pict.data,
+					pict.linesize);
 
-				//SDL_UpdateYUVTexture(
-				//	texture,
-				//	NULL,
-				//	yPlane,
-				//	dec_ctx->width,
-				//	uPlane,
-				//	uvPitch,
-				//	vPlane,
-				//	uvPitch
-				//);
+				SDL_UpdateYUVTexture(
+					texture,
+					NULL,
+					yPlane,
+					dec_ctx->width,
+					uPlane,
+					uvPitch,
+					vPlane,
+					uvPitch
+				);
 
-				//SDL_RenderClear(renderer);
-				//SDL_RenderCopy(renderer, texture, NULL, NULL);
-				//SDL_RenderPresent(renderer);
+				SDL_RenderClear(renderer);
+				SDL_RenderCopy(renderer, texture, NULL, NULL);
+				SDL_RenderPresent(renderer);
 
 			}
+#endif
+
+#ifdef __MIN_ENCODE
 			if (got_frame) {
 
 
@@ -396,8 +401,9 @@ int main(int argc, char *argv[]) {
 
 
 			}
+#endif
 			
-			
+#ifdef __MIN_SCREEN
 			SDL_PollEvent(&event);
 			switch (event.type) {
 			case SDL_QUIT:
@@ -410,6 +416,7 @@ int main(int argc, char *argv[]) {
 			default:
 				break;
 			}
+#endif
 			
 
 
