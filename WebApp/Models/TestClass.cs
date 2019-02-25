@@ -1,24 +1,44 @@
-﻿using System;
+﻿
+
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using System.IO;
 using System.Windows;
+
+using System;
+using System.Runtime.InteropServices;
 namespace WebApp.Models
 {
+    class Example
+    {
+    
+        [DllImport("C://Users/ken13/Desktop/minpro/FFmpegTest3/WebApp/TestDll.dll", CharSet = CharSet.Unicode,EntryPoint =
+       "math_add1", CallingConvention = CallingConvention.StdCall)]
+        public static extern int Add(int a, int b);
+
+        [DllImport("C://Users/ken13/Desktop/minpro/FFmpegTest3/WebApp/TestDll.dll", CharSet = CharSet.Unicode, EntryPoint =
+      "text", CallingConvention = CallingConvention.Cdecl)]
+        public static extern string TextOut(ref char str);
+
+
+
+
+    }
     public class TestClass
     {
         byte[] buffer = new byte[1024];
 
-        public int Add(int a, int b)
-        {
-
-            return a + b;
-        }
+       
 
         public string Hello()
         {
-            return "hello world!";
+
+            Char text = "Hello\0".ToArray()[0];
+
+
+            return Example.Add(3,1).ToString()+ Example.TextOut(ref text);
         }
         public string foo()
         {

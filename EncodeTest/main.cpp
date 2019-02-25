@@ -47,8 +47,6 @@ extern "C" //FFmpeg가 C라이브러리이기 때문에 이부분이 필요하다.
 #include <string.h>
 #include <math.h>
 
-
-
 #define STREAM_DURATION   10.0
 #define STREAM_FRAME_RATE 25 /* 25 images/s */
 #define STREAM_PIX_FMT    AV_PIX_FMT_YUV420P /* default pix_fmt */

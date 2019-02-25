@@ -14,7 +14,7 @@ namespace WebApp.Controllers
         public IActionResult Main()
         {
             TestClass min = new TestClass();
-            Console.Write(min.foo());
+            Console.Write(min.Hello());
             ViewData["text"] = min.Hello();  
             return View();
         }
