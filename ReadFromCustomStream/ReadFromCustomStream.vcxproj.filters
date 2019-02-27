@@ -21,10 +21,28 @@
     <ClCompile Include="tcp_net.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
+    <ClCompile Include="thread_m.cpp">
+      <Filter>소스 파일</Filter>
+    </ClCompile>
+    <ClCompile Include="ows.cpp">
+      <Filter>소스 파일</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="net.h">
       <Filter>헤더 파일</Filter>
     </ClInclude>
+    <ClInclude Include="thread_m.h">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="ows.h">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="log.h">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="cpp.hint" />
   </ItemGroup>
 </Project>

@@ -5,7 +5,7 @@
 #else
 #define MATHFUNCSDLL_API __declspec(dllimport)
 #endif
-
+#include<iostream>
 namespace MathFuncs
 {
 	// This class is exported from the MathFuncsDll.dll
@@ -33,4 +33,5 @@ extern "C"
 {
 	__declspec(dllexport) int __stdcall math_add1(int a, int b);
 	__declspec(dllexport) char* __stdcall text(char* str);
+	__declspec(dllexport) std::string __stdcall text1(std::string str);
 }

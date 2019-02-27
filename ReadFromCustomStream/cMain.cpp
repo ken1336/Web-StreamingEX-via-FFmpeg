@@ -1,56 +1,5 @@
 
-
-#pragma comment ( lib, "avcodec.lib" )
-#pragma comment ( lib, "avdevice.lib")
-#pragma comment ( lib, "avfilter.lib")
-#pragma comment ( lib, "avformat.lib")
-#pragma comment ( lib, "avutil.lib")
-#pragma comment ( lib, "postproc.lib")
-#pragma comment ( lib, "swresample.lib")
-#pragma comment ( lib, "swscale.lib")
-
-#pragma comment ( lib, "SDL2.lib")
-#pragma comment ( lib, "SDL2main.lib")
-#pragma comment ( lib, "SDL2test.lib")
-extern "C" //FFmpeg가 C라이브러리이기 때문에 이부분이 필요하다.
-
-{
-
-#include "libavcodec\avcodec.h"
-#include "libavdevice\avdevice.h"
-#include "libavfilter\avfilter.h"
-#include "libavformat\avformat.h"
-#include "libavutil\avutil.h"
-#include "libpostproc\postprocess.h"
-#include "libswresample\swresample.h"
-#include "libswscale\swscale.h"
-#include "libavutil/mathematics.h"
-
-#include "libavutil/opt.h"
-#include "libavutil/imgutils.h"
-
-
-#include "libavutil/avassert.h"
-#include "libavutil/channel_layout.h"
-
-
-#include "libavutil/timestamp.h"
-#include "libavformat/avio.h""
-#include"libavutil/file.h"
-
-
-
-
-}
-
-#include <stdio.h>
-#include <stdlib.h>
-#include <string.h>
-#include <math.h>
-#include<stdint.h>
-#include "SDL/SDL.h"
-#include "SDL/SDL_thread.h"
-#include"net.h"
+#include"ows.h"
 #define __MIN_SCREEN
 
 static int read_packet(void *opaque, uint8_t *buf, int buf_size)
@@ -81,7 +30,7 @@ static int read_packet(void *opaque, uint8_t *buf, int buf_size)
 }
 
 static int64_t seek(void *opaque, int64_t offset, int whence) {
-	printf("call seek function!\n");
+	printf("call seek function!		offset: %d		whence: %d\n",offset, whence);
 	return 0;
 }
 
@@ -91,10 +40,8 @@ static int64_t seek(void *opaque, int64_t offset, int whence) {
 #endif
 int main(int argc, char *argv[]) {
 
-	//open_input_file();
-	//encode_video();
-	//close_input_file();
-
+	
+	start_main_thread();
 
 	AVFormatContext *fmt_ctx = NULL;
 	AVCodecContext *dec_ctx = NULL;
@@ -103,7 +50,7 @@ int main(int argc, char *argv[]) {
 	const char* filename = "C:\\Users\\ken13\\Desktop\\media\\Sample.mp4";
 	AVPacket pkt;
 	AVFrame *frm = NULL;
-	int got_frame, got_output = 0;
+	int got_frame;
 	av_register_all();
 
 	if (SDL_Init(SDL_INIT_VIDEO | SDL_INIT_AUDIO | SDL_INIT_TIMER)) {
@@ -112,10 +59,10 @@ int main(int argc, char *argv[]) {
 	}
 
 	////////////////////////////////
-	printf("net: %d\n", avformat_network_init());
+	//printf("net: %d\n", avformat_network_init());
 	
 	AVIOContext *avio_ctx = NULL;
-	uint8_t *buffer = NULL, *avio_ctx_buffer = NULL;
+	uint8_t *avio_ctx_buffer = NULL;
 	size_t buffer_size = 1024*128 , avio_ctx_buffer_size = 32*1024*1024;
 	struct buffer_data bd = { 0 };
 	int ret;
@@ -126,6 +73,8 @@ int main(int argc, char *argv[]) {
 
 
 	avio_ctx_buffer = (uint8_t*)av_malloc(avio_ctx_buffer_size);
+	
+
 	if (!avio_ctx_buffer) {
 		ret = AVERROR(ENOMEM);
 		printf("avio_ctx_buffer alloctaion error!\n");
@@ -184,7 +133,7 @@ int main(int argc, char *argv[]) {
 
 
 	dec_ctx = avcodec_alloc_context3(dec);
-	if (avcodec_copy_context(dec_ctx, pCodecCtxOrig) != 0) {
+	if (avcodec_copy_context(dec_ctx, fmt_ctx->streams[vst_idx]->codec) != 0) {
 		fprintf(stderr, "Couldn't copy codec context");
 		return -1; // Error copying codec context
 	}
@@ -456,7 +405,7 @@ int main(int argc, char *argv[]) {
 	avio_close(outFmtCtx->pb);
 	avformat_free_context(outFmtCtx);
 	
-
+	av_free(avio_ctx_buffer);
 
 	av_frame_free(&frm);
 	avformat_close_input(&fmt_ctx);

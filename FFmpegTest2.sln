@@ -15,7 +15,9 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "transcoding", "transcoding\
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "ReadFromCustomStream", "ReadFromCustomStream\ReadFromCustomStream.vcxproj", "{19783EF5-A4E6-438C-98A1-E3DCC4904E3A}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WebApp", "WebApp\WebApp.csproj", "{7854DC04-DAC4-4E28-83DB-87CE6650316C}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WebApp", "WebApp\WebApp.csproj", "{7854DC04-DAC4-4E28-83DB-87CE6650316C}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "ows", "ows\ows.vcxproj", "{0AB35E45-2E1F-4019-B612-397D83A0519C}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -99,6 +101,16 @@ Global
 		{7854DC04-DAC4-4E28-83DB-87CE6650316C}.Release|x64.Build.0 = Release|Any CPU
 		{7854DC04-DAC4-4E28-83DB-87CE6650316C}.Release|x86.ActiveCfg = Release|Any CPU
 		{7854DC04-DAC4-4E28-83DB-87CE6650316C}.Release|x86.Build.0 = Release|Any CPU
+		{0AB35E45-2E1F-4019-B612-397D83A0519C}.Debug|Any CPU.ActiveCfg = Debug|Win32
+		{0AB35E45-2E1F-4019-B612-397D83A0519C}.Debug|x64.ActiveCfg = Debug|x64
+		{0AB35E45-2E1F-4019-B612-397D83A0519C}.Debug|x64.Build.0 = Debug|x64
+		{0AB35E45-2E1F-4019-B612-397D83A0519C}.Debug|x86.ActiveCfg = Debug|Win32
+		{0AB35E45-2E1F-4019-B612-397D83A0519C}.Debug|x86.Build.0 = Debug|Win32
+		{0AB35E45-2E1F-4019-B612-397D83A0519C}.Release|Any CPU.ActiveCfg = Release|Win32
+		{0AB35E45-2E1F-4019-B612-397D83A0519C}.Release|x64.ActiveCfg = Release|x64
+		{0AB35E45-2E1F-4019-B612-397D83A0519C}.Release|x64.Build.0 = Release|x64
+		{0AB35E45-2E1F-4019-B612-397D83A0519C}.Release|x86.ActiveCfg = Release|Win32
+		{0AB35E45-2E1F-4019-B612-397D83A0519C}.Release|x86.Build.0 = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

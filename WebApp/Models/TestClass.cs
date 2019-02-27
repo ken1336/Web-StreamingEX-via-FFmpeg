@@ -17,13 +17,18 @@ namespace WebApp.Models
         [DllImport("C://Users/ken13/Desktop/minpro/FFmpegTest3/WebApp/TestDll.dll", CharSet = CharSet.Unicode,EntryPoint =
        "math_add1", CallingConvention = CallingConvention.StdCall)]
         public static extern int Add(int a, int b);
+        [DllImport("C://Users/ken13/Desktop/minpro/FFmpegTest3/WebApp/ows.dll", CharSet = CharSet.Ansi, EntryPoint =
+   "text", CallingConvention = CallingConvention.Cdecl)]
+        public static extern IntPtr TextOut(string str);
 
-        [DllImport("C://Users/ken13/Desktop/minpro/FFmpegTest3/WebApp/TestDll.dll", CharSet = CharSet.Unicode, EntryPoint =
-      "text", CallingConvention = CallingConvention.Cdecl)]
-        public static extern string TextOut(ref char str);
+        [DllImport("C://Users/ken13/Desktop/minpro/FFmpegTest3/WebApp/TestDll.dll", CharSet = CharSet.Ansi, EntryPoint =
+     "text1", CallingConvention = CallingConvention.StdCall)]
+        public static extern string TextOut1(ref string str);
 
-
-
+        [DllImport("C://Users/ken13/Desktop/minpro/FFmpegTest3/WebApp/ows.dll", CharSet = CharSet.Auto, EntryPoint =
+    "start_main_thread", CallingConvention = CallingConvention.StdCall)]
+        public static extern int StartMain();
+        
 
     }
     public class TestClass
@@ -35,10 +40,11 @@ namespace WebApp.Models
         public string Hello()
         {
 
-            Char text = "Hello\0".ToArray()[0];
 
 
-            return Example.Add(3,1).ToString()+ Example.TextOut(ref text);
+            /*+ Marshal.PtrToStringAnsi(Example.TextOut("hello")*/
+            //Example.StartMain();
+            return Marshal.PtrToStringAnsi(Example.TextOut("hello"));
         }
         public string foo()
         {
