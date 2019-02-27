@@ -19,6 +19,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WebApp", "WebApp\WebApp.csp
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "ows", "ows\ows.vcxproj", "{0AB35E45-2E1F-4019-B612-397D83A0519C}"
 EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "openWS", "openWS\openWS.vcxproj", "{B0B0FC33-8639-4EAC-BE94-A59D5626C12E}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -111,6 +113,16 @@ Global
 		{0AB35E45-2E1F-4019-B612-397D83A0519C}.Release|x64.Build.0 = Release|x64
 		{0AB35E45-2E1F-4019-B612-397D83A0519C}.Release|x86.ActiveCfg = Release|Win32
 		{0AB35E45-2E1F-4019-B612-397D83A0519C}.Release|x86.Build.0 = Release|Win32
+		{B0B0FC33-8639-4EAC-BE94-A59D5626C12E}.Debug|Any CPU.ActiveCfg = Debug|Win32
+		{B0B0FC33-8639-4EAC-BE94-A59D5626C12E}.Debug|x64.ActiveCfg = Debug|x64
+		{B0B0FC33-8639-4EAC-BE94-A59D5626C12E}.Debug|x64.Build.0 = Debug|x64
+		{B0B0FC33-8639-4EAC-BE94-A59D5626C12E}.Debug|x86.ActiveCfg = Debug|Win32
+		{B0B0FC33-8639-4EAC-BE94-A59D5626C12E}.Debug|x86.Build.0 = Debug|Win32
+		{B0B0FC33-8639-4EAC-BE94-A59D5626C12E}.Release|Any CPU.ActiveCfg = Release|Win32
+		{B0B0FC33-8639-4EAC-BE94-A59D5626C12E}.Release|x64.ActiveCfg = Release|x64
+		{B0B0FC33-8639-4EAC-BE94-A59D5626C12E}.Release|x64.Build.0 = Release|x64
+		{B0B0FC33-8639-4EAC-BE94-A59D5626C12E}.Release|x86.ActiveCfg = Release|Win32
+		{B0B0FC33-8639-4EAC-BE94-A59D5626C12E}.Release|x86.Build.0 = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
