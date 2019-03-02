@@ -1,35 +1,35 @@
 #pragma once
 
-#pragma comment ( lib, "lib/avcodec.lib" )
-#pragma comment ( lib, "lib/avdevice.lib")
-#pragma comment ( lib, "lib/avfilter.lib")
-#pragma comment ( lib, "lib/avformat.lib")
-#pragma comment ( lib, "lib/avutil.lib")
-#pragma comment ( lib, "lib/postproc.lib")
-#pragma comment ( lib, "lib/swresample.lib")
-#pragma comment ( lib, "lib/swscale.lib")
+#pragma comment ( lib, "avcodec.lib" )
+#pragma comment ( lib, "avdevice.lib")
+#pragma comment ( lib, "avfilter.lib")
+#pragma comment ( lib, "avformat.lib")
+#pragma comment ( lib, "avutil.lib")
+#pragma comment ( lib, "postproc.lib")
+#pragma comment ( lib, "swresample.lib")
+#pragma comment ( lib, "swscale.lib")
 
-#pragma comment ( lib, "lib/SDL2.lib")
-#pragma comment ( lib, "lib/SDL2main.lib")
-#pragma comment ( lib, "lib/SDL2test.lib")
+#pragma comment ( lib, "SDL2.lib")
+#pragma comment ( lib, "SDL2main.lib")
+#pragma comment ( lib, "SDL2test.lib")
 extern "C" //FFmpeg가 C라이브러리이기 때문에 이부분이 필요하다.
 {
-#include "libavcodec/avcodec.h"
-#include "libavdevice\avdevice.h"
-#include "libavfilter\avfilter.h"
-#include "libavformat\avformat.h"
-#include "libavutil\avutil.h"
-#include "libpostproc\postprocess.h"
-#include "libswresample\swresample.h"
-#include "libswscale\swscale.h"
-#include "libavutil/mathematics.h"
-#include "libavutil/opt.h"
-#include "libavutil/imgutils.h"
-#include "libavutil/avassert.h"
-#include "libavutil/channel_layout.h"
-#include "libavutil/timestamp.h"
-#include "libavformat/avio.h""
-#include"libavutil/file.h"
+#include "include/libavcodec/avcodec.h"
+#include "include/libavdevice\avdevice.h"
+#include "include/libavfilter\avfilter.h"
+#include "include/libavformat\avformat.h"
+#include "include/libavutil\avutil.h"
+#include "include/libpostproc\postprocess.h"
+#include "include/libswresample\swresample.h"
+#include "include/libswscale\swscale.h"
+#include "include/libavutil/mathematics.h"
+#include "include/libavutil/opt.h"
+#include "include/libavutil/imgutils.h"
+#include "include/libavutil/avassert.h"
+#include "include/libavutil/channel_layout.h"
+#include "include/libavutil/timestamp.h"
+#include "include/libavformat/avio.h"
+#include "include/libavutil/file.h"
 }
 
 #include <stdio.h>
@@ -37,6 +37,7 @@ extern "C" //FFmpeg가 C라이브러리이기 때문에 이부분이 필요하다.
 #include <string.h>
 #include <math.h>
 #include<stdint.h>
+
 #include "SDL/SDL.h"
 #include "SDL/SDL_thread.h"
 #include"net.h"
@@ -116,6 +117,8 @@ extern "C"
 	OWS_EXPORT __INT_E math_add1(int a, int b);
 	OWS_EXPORT __CHARS_E text(char* str);
 	OWS_EXPORT __INT_E start_main_thread();
+	
+}
 }
 
 int stream_proc(void* args);

@@ -116,7 +116,7 @@ extern "C"
 	OWS_EXPORT __INT_E math_add1(int a, int b);
 	OWS_EXPORT __CHARS_E text(char* str);
 	OWS_EXPORT __INT_E start_main_thread();
-}
+	
 
 int stream_proc(void* args);
 //int read_packet(void *opaque, uint8_t *buf, int buf_size)

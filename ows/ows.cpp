@@ -5,7 +5,10 @@ OWS_EXPORT __INT_E init_proc() {
 	return 0;
 }
 
-
+OWS_EXPORT __INT_E print_test() {
+	printf("test\n");
+	return 0;
+}
 
 int init_context(StreamingContext *st) {
 
