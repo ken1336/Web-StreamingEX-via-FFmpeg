@@ -47,9 +47,8 @@ namespace WebApp.Models
         {
             IEnumerable<string> pathList = new List<string>() { Environment.CurrentDirectory+"/"};
 
-
-
             AddEnvironmentPaths(pathList);
+            
         }
         
 
