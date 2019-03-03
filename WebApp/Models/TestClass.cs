@@ -45,7 +45,7 @@ namespace WebApp.Models
 
         public TestClass()
         {
-            IEnumerable<string> pathList = new List<string>() {"C://Users/ken13/Desktop/minpro/FFmpegTest3/WebApp/" };
+            IEnumerable<string> pathList = new List<string>() { Environment.CurrentDirectory+"/"};
 
 
 
