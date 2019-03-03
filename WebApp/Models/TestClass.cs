@@ -1,6 +1,4 @@
-﻿
-
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -9,33 +7,51 @@ using System.Windows;
 
 using System;
 using System.Runtime.InteropServices;
+
 namespace WebApp.Models
 {
     class Example
     {
-    
-        [DllImport("C://Users/ken13/Desktop/minpro/FFmpegTest3/WebApp/TestDll.dll", CharSet = CharSet.Unicode,EntryPoint =
-       "math_add1", CallingConvention = CallingConvention.StdCall)]
-        public static extern int Add(int a, int b);
-        [DllImport("C://Users/ken13/Desktop/minpro/FFmpegTest3/WebApp/ows.dll", CharSet = CharSet.Ansi, EntryPoint =
-   "text", CallingConvention = CallingConvention.Cdecl)]
-        public static extern IntPtr TextOut(string str);
 
-        [DllImport("C://Users/ken13/Desktop/minpro/FFmpegTest3/WebApp/TestDll.dll", CharSet = CharSet.Ansi, EntryPoint =
-     "text1", CallingConvention = CallingConvention.StdCall)]
-        public static extern string TextOut1(ref string str);
 
-        [DllImport("C://Users/ken13/Desktop/minpro/FFmpegTest3/WebApp/ows.dll", CharSet = CharSet.Auto, EntryPoint =
-    "start_main_thread", CallingConvention = CallingConvention.StdCall)]
+        //     [DllImport("C://Users/ken13/Desktop/minpro/FFmpegTest3/WebApp/a.dll", CharSet = CharSet.Ansi, EntryPoint =
+        //"text", CallingConvention = CallingConvention.Cdecl)]
+        //     public static extern IntPtr TextOut(string str);
+        //        [DllImport(dllName: "C://Users/ken13/Desktop/minpro/FFmpegTest3/WebApp/ows.dll", CharSet = CharSet.Ansi, EntryPoint =
+        //        "start_main_thread", CallingConvention = CallingConvention.StdCall)]
+        //        public static extern int Tts();
+
+
+
+
+        [DllImport("Project2.dll", CharSet = CharSet.Ansi, EntryPoint = "testdll", CallingConvention = CallingConvention.StdCall)]
         public static extern int StartMain();
-        
+        [DllImport("Project2.dll", CharSet = CharSet.Ansi, EntryPoint = "testdll2", CallingConvention = CallingConvention.StdCall)]
+        public static extern int StartMain2();
+
+
+        [DllImport("Project5.dll", CharSet = CharSet.Ansi, EntryPoint = "_testdll", CallingConvention = CallingConvention.StdCall)]
+        public static extern int Test();
+        [DllImport("Project5.dll", CharSet = CharSet.Ansi, EntryPoint = "_testdll2", CallingConvention = CallingConvention.StdCall)]
+        public static extern int Test2();
+
+        [DllImport("ows.dll", CharSet = CharSet.Ansi, EntryPoint = "start_main_thread", CallingConvention = CallingConvention.StdCall)]
+        public static extern int StartModule();
 
     }
     public class TestClass
     {
         byte[] buffer = new byte[1024];
 
-       
+        public TestClass()
+        {
+            IEnumerable<string> pathList = new List<string>() {"C://Users/ken13/Desktop/minpro/FFmpegTest3/WebApp/" };
+
+
+
+            AddEnvironmentPaths(pathList);
+        }
+        
 
         public string Hello()
         {
@@ -43,8 +59,14 @@ namespace WebApp.Models
 
 
             /*+ Marshal.PtrToStringAnsi(Example.TextOut("hello")*/
-           // Example.StartMain();
-            return Marshal.PtrToStringAnsi(Example.TextOut("hello"));
+            //Example.Tts();
+
+            // Example.Test2();
+            //Example.Test().ToString();
+            Example.StartModule();
+            string str = Example.Test().ToString();
+            Console.WriteLine("hello world!");
+            return str;//Marshal.PtrToStringAnsi(Example.TextOut("hello"));
         }
         public string foo()
         {
@@ -73,11 +95,18 @@ namespace WebApp.Models
             return "파일쓰기 성공";
         }
         private string name;
-        public string getName()
+        public string GetName()
         {
             return name;
         }
+        static void AddEnvironmentPaths(IEnumerable<string> paths)
+        {
+            var path = new[] { Environment.GetEnvironmentVariable("PATH") ?? string.Empty };
 
+            string newPath = string.Join(Path.PathSeparator.ToString(), path.Concat(paths));
+
+            Environment.SetEnvironmentVariable("PATH", newPath);
+        }
         public string Name { get; set; }
     }
 
