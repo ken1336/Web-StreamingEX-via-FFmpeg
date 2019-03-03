@@ -45,7 +45,7 @@ namespace WebApp.Models
 
         public TestClass()
         {
-            IEnumerable<string> pathList = new List<string>() { Environment.CurrentDirectory+"/"};
+            IEnumerable<string> pathList = new List<string>() { Environment.CurrentDirectory + "/shared/mac/",Environment.CurrentDirectory+"/shared/window/"};
 
 
 
@@ -101,11 +101,12 @@ namespace WebApp.Models
         }
         static void AddEnvironmentPaths(IEnumerable<string> paths)
         {
-            var path = new[] { Environment.GetEnvironmentVariable("PATH") ?? string.Empty };
+            var path = new[] { Environment.GetEnvironmentVariable("PATH") ?? string.Empty };    
 
             string newPath = string.Join(Path.PathSeparator.ToString(), path.Concat(paths));
 
             Environment.SetEnvironmentVariable("PATH", newPath);
+            Environment.SetEnvironmentVariable("DYLD_LIBRARY_PATH", newPath);
         }
         public string Name { get; set; }
     }
