@@ -41,7 +41,7 @@ static int64_t seek(void *opaque, int64_t offset, int whence) {
 int main(int argc, char *argv[]) {
 
 	
-	start_main_thread();
+	
 
 	AVFormatContext *fmt_ctx = NULL;
 	AVCodecContext *dec_ctx = NULL;
@@ -81,12 +81,11 @@ int main(int argc, char *argv[]) {
 		exit(-1);
 	}
 	//buffer = 0;
-	bd.ptr = 0;
+	//bd.ptr = 0;
 	bd.size = avio_ctx_buffer_size;
 
 	tcpio_stream* stream = custom_tcp_open((char*)"127.0.0.1", 8888,&bd);
-	avio_ctx = avio_alloc_context(avio_ctx_buffer, buffer_size,
-		0, stream, &read_packet, NULL, &seek);
+	avio_ctx = avio_alloc_context(avio_ctx_buffer, buffer_size, 0, stream, &read_packet, NULL, &seek);
 	
 	fmt_ctx->pb = avio_ctx;
 	/////////////////////////////////
@@ -143,6 +142,8 @@ int main(int argc, char *argv[]) {
 		return -1;
 	}
 	
+
+
 
 
 

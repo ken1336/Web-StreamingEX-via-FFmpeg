@@ -48,12 +48,12 @@ enum OWSType {
 	TCP_IO
 };
 
-typedef struct StreamingContext {
+typedef struct DecodeContext {
 
-	void* input_stream = NULL;
-	unsigned int context_id;
-	unsigned int threadID;
-	//Decode proc properties
+	OWSType IOType;
+	int(*read_packet)(void *opaque, uint8_t *buf, int buf_size);
+	
+
 	AVFormatContext *in_format_context = NULL;
 	AVCodecContext *decode_context = NULL;
 	AVCodec *decoder = NULL;
@@ -62,31 +62,21 @@ typedef struct StreamingContext {
 	AVFrame *decode_out_frame = NULL;
 	int got_frame;
 	int vstream_idx = -1;
-
-	//Input proc properties
-	tcpio_stream* stream = NULL;
-
-	AVIOContext *avio_ctx = NULL;
-	uint8_t *avio_ctx_buffer = NULL;
-	size_t  avio_ctx_buffer_size = DEFAULT_STREAM_BUFFER_SIZE;
-	size_t buffer_size = DEFAULT_BUFFER_SIZE;
-	struct buffer_data bd = { 0 };
-
-
-	//Encode proc properties
-
+	int astream_idx = -1;
+}DecodeContext;
+typedef struct EncodeContext {
 	AVFormatContext *out_format_context = NULL;
 	AVCodec *encoder = NULL;
 	AVCodecContext *encode_context = NULL;
 	AVOutputFormat * out_format = NULL;
-
 	AVStream * out_stream = NULL;
 	AVPacket *output_packet = NULL;
 
 	void* output_stream = NULL;
 
+}EncodeContext;
 
-	//SDL properties
+typedef struct SDLContext {
 	SDL_Event event;
 	SDL_Window *screen = NULL;
 	SDL_Renderer *renderer = NULL;
@@ -95,21 +85,47 @@ typedef struct StreamingContext {
 	size_t yPlaneSz, uvPlaneSz;
 	int uvPitch;
 	struct SwsContext *sws_ctx = NULL;
+}SDLContext;
+
+typedef struct StreamingContext {
+
+	void* input_stream = NULL;
+	unsigned int context_id;
+	unsigned int threadID;
+
+
+	//Decode proc properties
+	DecodeContext decode_ctx;
+
+	//Input proc properties
+	tcpio_stream* stream = NULL;
+	AVIOContext *avio_ctx = NULL;
+	uint8_t *avio_ctx_buffer = NULL;
+	size_t  avio_ctx_buffer_size = DEFAULT_STREAM_BUFFER_SIZE;
+	size_t buffer_size = DEFAULT_BUFFER_SIZE;
+	struct buffer_data bd = { 0 };
+
+
+	//Encode proc properties
+	EncodeContext encode_ctx;
+	
+
+	//SDL properties
+	SDLContext sdl_ctx;
 
 };
 
-int init_context(StreamingContext *s_cxt);
+
 extern "C"
 {
-
-
-
 	OWS_EXPORT __CHARS_E text_out(char* str);
 	OWS_EXPORT __INT_E math_add1(int a, int b);
 	OWS_EXPORT __CHARS_E text(char* str);
 	OWS_EXPORT __INT_E start_main_thread();
 	OWS_EXPORT __INT_E print_test();
 }
+
+int init_context(StreamingContext *s_cxt);
 
 int stream_proc(void* args);
 //int read_packet(void *opaque, uint8_t *buf, int buf_size)

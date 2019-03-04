@@ -14,9 +14,9 @@ namespace WebApp.Models
     {
 
 
-        //     [DllImport("C://Users/ken13/Desktop/minpro/FFmpegTest3/WebApp/a.dll", CharSet = CharSet.Ansi, EntryPoint =
-        //"text", CallingConvention = CallingConvention.Cdecl)]
-        //     public static extern IntPtr TextOut(string str);
+             [DllImport("Testdll.dll", CharSet = CharSet.Ansi, EntryPoint =
+        "text", CallingConvention = CallingConvention.Cdecl)]
+             public static extern IntPtr TextOut(string str);
         //        [DllImport(dllName: "C://Users/ken13/Desktop/minpro/FFmpegTest3/WebApp/ows.dll", CharSet = CharSet.Ansi, EntryPoint =
         //        "start_main_thread", CallingConvention = CallingConvention.StdCall)]
         //        public static extern int Tts();
@@ -38,6 +38,8 @@ namespace WebApp.Models
         [DllImport("ows.dll", CharSet = CharSet.Ansi, EntryPoint = "start_main_thread", CallingConvention = CallingConvention.StdCall)]
         public static extern int StartModule();
 
+        [DllImport("Project2.dll", CharSet = CharSet.Ansi, EntryPoint = "test", CallingConvention = CallingConvention.Cdecl)]
+        public static extern IntPtr TestInput(string str);
     }
     public class TestClass
     {
@@ -63,10 +65,14 @@ namespace WebApp.Models
 
             // Example.Test2();
             //Example.Test().ToString();
-            Example.StartModule();
-            string str = Example.Test().ToString();
-            Console.WriteLine("hello world!");
-            return str;//Marshal.PtrToStringAnsi(Example.TextOut("hello"));
+            //Example.StartModule();
+            //string str = Example.Test().ToString();
+            //Console.WriteLine("hello world!");
+            string testString = "hello this is test!";
+           
+            string str = Marshal.PtrToStringAnsi(Example.TestInput(testString));
+
+            return str;// Marshal.PtrToStringAnsi(Example.TextOut("hello"));
         }
         public string foo()
         {

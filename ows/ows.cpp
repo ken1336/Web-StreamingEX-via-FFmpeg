@@ -15,6 +15,7 @@ int init_context(StreamingContext *st) {
 	int ret = 0;
 	st->context_id = 10;
 	av_register_all();
+	
 
 	if (SDL_Init(SDL_INIT_VIDEO | SDL_INIT_AUDIO | SDL_INIT_TIMER)) {
 		ret = -1;
@@ -22,12 +23,20 @@ int init_context(StreamingContext *st) {
 		return ret;
 	}
 
-	if (!(st->in_format_context = avformat_alloc_context())) {
+	if (!(st->decode_ctx.in_format_context = avformat_alloc_context())) {
 		ret = -1;
 		print_log("Format context alloctaion error!", ret);
 		return ret;
 	}
 
+	st->avio_ctx_buffer = (uint8_t*)av_malloc(DEFAULT_STREAM_BUFFER_SIZE);
+	if (!st->avio_ctx_buffer) {
+		ret = -1;
+		print_log("avio_ctx_buffer alloctaion error!\n");
+		return ret;
+	}
+
+	st->bd.size = DEFAULT_BUFFER_SIZE;
 	return ret;
 }
 
