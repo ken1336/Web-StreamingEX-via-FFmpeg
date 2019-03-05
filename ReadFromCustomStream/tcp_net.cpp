@@ -48,6 +48,8 @@ tcpio_stream* custom_tcp_open(char* ip, int port, buffer_data* buf) {
 	return stream;
 }
 
+
+
 int custom_tcp_close(tcpio_stream* stream) {
 	closesocket(stream->socket);
 	//_beginthreadex(NULL, 0, sendThread, (void*)hSocket, 0, (unsigned*)&dwThreadID);

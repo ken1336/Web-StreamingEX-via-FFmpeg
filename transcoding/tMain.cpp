@@ -206,10 +206,10 @@ int main(int argc, char *argv[]) {
 
 
 	
-	const char* outfile = "C:\\Users\\ken13\\Desktop\\media\\testsample";
+	const char* outfile = "C:\\Users\\ken13\\Desktop\\media\\m3u8test.m3u8";
 	AVOutputFormat * outFmt = NULL;
 	AVFormatContext *outFmtCtx = NULL;
-	avformat_alloc_output_context2(&outFmtCtx, outFmt, "hls", outfile);
+	avformat_alloc_output_context2(&outFmtCtx, outFmt, NULL, outfile);
 	AVStream * outStrm = avformat_new_stream(outFmtCtx, enc_ctx->codec);
 
 	printf("%s\n",outFmtCtx->oformat->name);

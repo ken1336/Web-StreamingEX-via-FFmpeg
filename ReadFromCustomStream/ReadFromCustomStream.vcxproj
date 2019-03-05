@@ -145,7 +145,6 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="cMain.cpp" />
-    <ClCompile Include="ows.cpp" />
     <ClCompile Include="tcp_net.cpp" />
     <ClCompile Include="thread_m.cpp" />
   </ItemGroup>

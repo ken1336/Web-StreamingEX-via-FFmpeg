@@ -70,7 +70,7 @@ OWS_EXPORT __INT_E start_main_thread() {
 	}
 
 
-	return ret;
+	return st.context_id;
 }
 
 void print_log(const char* str, int err_code) {

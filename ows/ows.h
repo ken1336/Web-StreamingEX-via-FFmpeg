@@ -38,7 +38,7 @@ extern "C" //FFmpeg가 C라이브러리이기 때문에 이부분이 필요하다.
 
 #define OWS_EXPORT __declspec(dllexport)
 #define __INT_E int __stdcall
-#define __CHARS_E char* __cdecl
+#define __CHARS_E char* __stdcall
 
 #define DEFAULT_BUFFER_SIZE 4*1024
 #define DEFAULT_STREAM_BUFFER_SIZE 32*1024*1024

@@ -1,6 +1,7 @@
 
 #include"ows.h"
-#define __MIN_SCREEN
+//#define __MIN_SCREEN
+#define __MIN_ENCODE
 
 static int read_packet(void *opaque, uint8_t *buf, int buf_size)
 {
@@ -183,11 +184,11 @@ int main(int argc, char *argv[]) {
 	/* init the video encoder */
 
 
-
-	const char* outfile = "C:\\Users\\ken13\\Desktop\\media\\testsample.mp4";
+	const char* outfile = "C:\\Users\\ken13\\Desktop\\minpro\\FFmpegTest3\\WebApp\\media\\ttest.m3u8";
+	//const char* outfile = "C:\\Users\\ken13\\Desktop\\media\\testsample.mp4";
 	AVOutputFormat * outFmt = NULL;
 	AVFormatContext *outFmtCtx = NULL;
-	avformat_alloc_output_context2(&outFmtCtx, outFmt, "mp4", outfile);
+	avformat_alloc_output_context2(&outFmtCtx, outFmt, NULL, outfile);
 	AVStream * outStrm = avformat_new_stream(outFmtCtx, enc_ctx->codec);
 
 	printf("%s\n", outFmtCtx->oformat->name);
