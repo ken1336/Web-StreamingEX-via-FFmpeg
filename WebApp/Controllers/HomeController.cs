@@ -10,7 +10,19 @@ namespace WebApp.Controllers
 {
     public class HomeController : Controller
     {
+        //[HttpGet]
+        //public FileResult DownloadSample()
+        //{
+        //    // 웹서버 상의 파일 절대 경로 구함
+           
+        //    string filePath ="~/media/ttest.m3u8";
 
+        //    // 파일 읽기
+        //    byte[] fileBytes = System.IO.File.ReadAllBytes(filePath);
+
+        //    // FileResult 리턴
+        //  //  return File(fileBytes, System.Net.Mime.MediaTypeNames.Application.Octet, Path.GetFileName(filePath));
+        //}
         public IActionResult Main()
         {
             TestClass min = new TestClass();

@@ -184,7 +184,7 @@ int main(int argc, char *argv[]) {
 	/* init the video encoder */
 
 
-	const char* outfile = "C:\\Users\\ken13\\Desktop\\minpro\\FFmpegTest3\\WebApp\\media\\ttest.m3u8";
+	const char* outfile = "C:\\Users\\ken13\\Desktop\\minpro\\FFmpegTest3\\WebApp\\wwwroot\\media\\ttest.m3u8";
 	//const char* outfile = "C:\\Users\\ken13\\Desktop\\media\\testsample.mp4";
 	AVOutputFormat * outFmt = NULL;
 	AVFormatContext *outFmtCtx = NULL;
