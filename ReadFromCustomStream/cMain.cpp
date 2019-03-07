@@ -64,7 +64,7 @@ int main(int argc, char *argv[]) {
 	
 	AVIOContext *avio_ctx = NULL;
 	uint8_t *avio_ctx_buffer = NULL;
-	size_t buffer_size = 1024*128 , avio_ctx_buffer_size = 32*1024*1024;
+	size_t buffer_size = 1024*256 , avio_ctx_buffer_size = 32*1024*1024;
 	struct buffer_data bd = { 0 };
 	int ret;
 	if (!(fmt_ctx = avformat_alloc_context())) {
@@ -149,7 +149,7 @@ int main(int argc, char *argv[]) {
 
 
 
-	const AVCodec *enc = avcodec_find_encoder(AV_CODEC_ID_H265);
+	const AVCodec *enc = avcodec_find_encoder(AV_CODEC_ID_H264);
 	//const AVCodec *enc = avcodec_find_encoder(AV_CODEC_ID_VP8);
 	AVCodecContext *enc_ctx = NULL;
 
@@ -173,8 +173,8 @@ int main(int argc, char *argv[]) {
 	//enc_ctx->pix_fmt = AV_PIX_FMT_YUV420P;
 
 	enc_ctx->bit_rate = dec_ctx->bit_rate;
-	enc_ctx->width = dec_ctx->width;
-	enc_ctx->height = dec_ctx->height;
+	enc_ctx->width = dec_ctx->width/2;
+	enc_ctx->height = dec_ctx->height/2;
 	enc_ctx->time_base = { 1, 25 };
 	enc_ctx->framerate = { 25, 1 };
 	enc_ctx->gop_size = dec_ctx->gop_size;
@@ -190,6 +190,7 @@ int main(int argc, char *argv[]) {
 	AVFormatContext *outFmtCtx = NULL;
 	avformat_alloc_output_context2(&outFmtCtx, outFmt, NULL, outfile);
 	AVStream * outStrm = avformat_new_stream(outFmtCtx, enc_ctx->codec);
+	
 
 	printf("%s\n", outFmtCtx->oformat->name);
 	//outFmtCtx->oformat = outFmt;
@@ -199,7 +200,7 @@ int main(int argc, char *argv[]) {
 	
 	//outStrm->duration = 5;
 	if (enc->id == AV_CODEC_ID_H264)
-		av_opt_set(enc_ctx->priv_data, "preset", "slow", 0);
+		av_opt_set(enc_ctx->priv_data, "preset", "medium", 0);
 
 	avio_open(&outFmtCtx->pb, outfile, AVIO_FLAG_WRITE);
 
@@ -339,7 +340,10 @@ int main(int argc, char *argv[]) {
 
 				//av_frame_make_writable(frm);
 				int gg;
+				
+				
 				avcodec_encode_video2(enc_ctx, outpkt1, frm, &gg);
+				frm->pts= enc_ctx->frame_number;
 
 				if (gg) {
 					//printf("write%d\n", outpkt1->size);

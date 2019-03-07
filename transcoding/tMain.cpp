@@ -99,7 +99,7 @@ int main(int argc, char *argv[]) {
 	AVCodecContext *dec_ctx = NULL;
 	AVCodec *dec;
 	int vst_idx = -1;
-	const char* filename = "C:\\Users\\ken13\\Desktop\\media\\Sample.mp4";
+	const char* filename = "C:\\Users\\ken13\\Desktop\\media.mp4";
 	AVPacket pkt;
 	AVFrame *frm;
 	int got_frame, got_output = 0;
@@ -171,7 +171,7 @@ int main(int argc, char *argv[]) {
 
 
 
-	const AVCodec *enc = avcodec_find_encoder(AV_CODEC_ID_H265);
+	const AVCodec *enc = avcodec_find_encoder(AV_CODEC_ID_H264);
 	//const AVCodec *enc = avcodec_find_encoder(AV_CODEC_ID_VP8);
 	AVCodecContext *enc_ctx = NULL;
 
@@ -198,7 +198,7 @@ int main(int argc, char *argv[]) {
 	enc_ctx->width = dec_ctx->width;
 	enc_ctx->height = dec_ctx->height;
 	enc_ctx->time_base = { 1, 25 };
-	//enc_ctx->framerate = { 25, 1 };
+	enc_ctx->framerate = { 25, 1 };
 	enc_ctx->gop_size = dec_ctx->gop_size;
 	enc_ctx->max_b_frames = dec_ctx->max_b_frames;
 	enc_ctx->pix_fmt = dec_ctx->pix_fmt;
@@ -206,7 +206,7 @@ int main(int argc, char *argv[]) {
 
 
 	
-	const char* outfile = "C:\\Users\\ken13\\Desktop\\media\\m3u8test.m3u8";
+	const char* outfile = "C:\\Users\\ken13\\Desktop\\minpro\\FFmpegTest3\\WebApp\\wwwroot\\media\\tttest.m3u8";
 	AVOutputFormat * outFmt = NULL;
 	AVFormatContext *outFmtCtx = NULL;
 	avformat_alloc_output_context2(&outFmtCtx, outFmt, NULL, outfile);
@@ -216,13 +216,15 @@ int main(int argc, char *argv[]) {
 	//outFmtCtx->oformat = outFmt;
 	outStrm->codec = enc_ctx;
 	outStrm->time_base = enc_ctx->time_base;
-	//outStrm->duration = 5;
+	outStrm->avg_frame_rate = { 25,1 };
+
+	//outStrm->duration = 3;
 	if(enc->id == AV_CODEC_ID_H264)
 		av_opt_set(enc_ctx->priv_data, "preset", "slow", 0);
 
 	avio_open(&outFmtCtx->pb, outfile, AVIO_FLAG_WRITE);
 	
-	//outFmt = outFmtCtx->oformat;
+	outFmt = outFmtCtx->oformat;
 
 	//outStrm->codec->coder_type = 0;
 	avcodec_open2(enc_ctx, enc, NULL);
@@ -256,9 +258,9 @@ int main(int argc, char *argv[]) {
 				//av_frame_make_writable(frm);
 				int gg;
 				avcodec_encode_video2(enc_ctx, outpkt1, frm, &gg);
-
+				frm->pts = enc_ctx->frame_number;
 				if (gg) {
-					printf("write%d\n", outpkt1->size);
+					//printf("write%d\n", outpkt1->size);
 					av_write_frame(outFmtCtx, outpkt1);
 
 					size += outpkt1->size;

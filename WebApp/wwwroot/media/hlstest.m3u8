@@ -4,4 +4,10 @@
 #EXT-X-MEDIA-SEQUENCE:0
 #EXTINF:5.280000,
 hlstest0.ts
+#EXTINF:5.280000,
+hlstest0.ts
+#EXTINF:5.280000,
+hlstest0.ts
+#EXTINF:5.280000,
+hlstest0.ts
 #EXT-X-ENDLIST
