@@ -47,7 +47,7 @@ namespace WebApp.Models
 
         public TestClass()
         {
-            IEnumerable<string> pathList = new List<string>() { Environment.CurrentDirectory + "/shared/mac/",Environment.CurrentDirectory+"/shared/window/"};
+            IEnumerable<string> pathList = new List<string>() { Environment.CurrentDirectory + "/shared/window/",Environment.CurrentDirectory+"/shared/mac/"};
 
 
 
