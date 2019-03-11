@@ -5,6 +5,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using WebApp.Models;
+using WebApp.Models.Native;
 
 namespace WebApp.Controllers
 {
@@ -27,7 +28,8 @@ namespace WebApp.Controllers
         {
             TestClass min = new TestClass();
             Console.Write(min.Hello());
-            ViewData["text"] = min.Hello();  
+            ViewData["text"] = min.Hello();
+            new ServerClass();
             return View();
         }
         public IActionResult Index()

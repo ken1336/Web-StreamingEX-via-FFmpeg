@@ -48,7 +48,7 @@ tcpio_stream* custom_tcp_open(char* ip, int port, buffer_data* buf) {
 	return stream;
 }
 
-tcpio_stream* custom_tcp_open(char* ip, int port, buffer_data* buf) {
+tcpio_stream* custom_tcp_open2(char* ip, int port, buffer_data* buf) {
 
 }
 
