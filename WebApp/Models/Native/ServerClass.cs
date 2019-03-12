@@ -9,17 +9,19 @@ using System.Net.Sockets;
 using System.Collections.Generic;
 using System.Threading;
 
+
 namespace WebApp.Models.Native
 {
     public class ServerClass
     {
         Dictionary<int, RawDataReceiveClass> SocketMap;
         TcpListener Server;
-
+        
         Socket Client;
         int ClientNum = 0;
         public ServerClass()
         {
+            LogClass.LogWrite("hello this is test!");
             Thread BindingThread = new Thread(new ThreadStart(Run));
             BindingThread.Start();
         }
@@ -39,7 +41,7 @@ namespace WebApp.Models.Native
                 }
                 catch (Exception e)
                 {
-                    Console.Write(e.Message);
+                    LogClass.LogWrite(e.Message);
                 }
             }
 
