@@ -9,3 +9,20 @@ RawDataReceiveClass Run!
 2320  0 1113980
 2320  0 22085292
 2320  0 458120
+hello this is test!
+hello this is test!
+hello this is test!
+Object reference not set to an instance of an object.
+RawDataReceiveClass Run!2468
+2468  0 983040
+2468  1 1029760
+2468  2 8977524
+2468  3 5596180
+2468  4 589840
+2468  5 33554432
+2468  6 27847016
+2468  7 65408
+hello this is test!
+hello this is test!
+hello this is test!
+hello this is test!

@@ -29,7 +29,7 @@ int init_context(StreamingContext *st) {
 		return ret;
 	}
 
-	st->avio_ctx_buffer = (uint8_t*)av_malloc(DEFAULT_STREAM_BUFFER_SIZE);
+	//st->avio_ctx_buffer = (uint8_t*)av_malloc(DEFAULT_STREAM_BUFFER_SIZE);
 	if (!st->avio_ctx_buffer) {
 		ret = -1;
 		print_log("avio_ctx_buffer alloctaion error!\n");
@@ -47,10 +47,13 @@ int stream_proc(void* args) {
 
 	_endthreadex(1);
 }
-OWS_EXPORT __INT_E start_main_thread() {
+OWS_EXPORT __INT_E start_main_thread(uint8_t *buffer, size_t buf_size) {
 
 	int ret;
 	StreamingContext st;
+	st.avio_ctx_buffer = buffer;
+	st.avio_ctx_buffer_size = buf_size;
+	
 	if (ret = init_context(&st) < 0) {
 		print_log("Int streaming context error", ret);
 	}
