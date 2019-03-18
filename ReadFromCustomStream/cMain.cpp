@@ -10,6 +10,7 @@ static int read_packet(void *opaque, uint8_t *buf, int buf_size)
 	struct tcpio_stream *bd = (tcpio_stream *)opaque;
 	//printf("buffer ptr: %d		buffer size: %d		buf_size:%d\n", bd->buffer->ptr, bd->buffer->size,buf_size);
 	buf_size = FFMIN(buf_size, bd->buffer->size);
+	
 	if (!buf_size)
 		return AVERROR_EOF;
 	printf("ptr:%p		pre:%p		size:%d		buf_size: %d\n", bd->buffer->ptr, bd->buffer->pre, bd->buffer->size, buf_size);
@@ -64,6 +65,7 @@ int main(int argc, char *argv[]) {
 	
 	AVIOContext *avio_ctx = NULL;
 	uint8_t *avio_ctx_buffer = NULL;
+	uint8_t **avio_ctx_buffer_ref = NULL;
 	size_t buffer_size = 1024*256 , avio_ctx_buffer_size = 32*1024*1024;
 	struct buffer_data bd = { 0 };
 	int ret;
@@ -74,8 +76,9 @@ int main(int argc, char *argv[]) {
 
 
 	avio_ctx_buffer = (uint8_t*)av_malloc(avio_ctx_buffer_size);
-	
+	avio_ctx_buffer_ref = &avio_ctx_buffer;
 
+	printf("			%d	%d\n\n",*avio_ctx_buffer_ref, avio_ctx_buffer);
 	if (!avio_ctx_buffer) {
 		ret = AVERROR(ENOMEM);
 		printf("avio_ctx_buffer alloctaion error!\n");
@@ -86,12 +89,14 @@ int main(int argc, char *argv[]) {
 	bd.size = avio_ctx_buffer_size;
 
 	tcpio_stream* stream = custom_tcp_open((char*)"127.0.0.1", 8888,&bd);
-	avio_ctx = avio_alloc_context(avio_ctx_buffer, buffer_size, 0, stream, &read_packet, NULL, &seek);
+	avio_ctx = avio_alloc_context(*avio_ctx_buffer_ref, buffer_size, 0, stream, &read_packet, NULL, &seek);
 	
 	fmt_ctx->pb = avio_ctx;
 	/////////////////////////////////
-
-
+	printf("			%d	%d\n\n", *avio_ctx_buffer_ref, avio_ctx_buffer);
+	uint8_t* avio_ctx_buffer2 = (uint8_t*)av_malloc(avio_ctx_buffer_size);
+	avio_ctx_buffer_ref = &avio_ctx_buffer2;
+	printf("			%d	%d\n\n", *avio_ctx_buffer_ref, avio_ctx_buffer);
 	
 
 	if (avformat_open_input(&fmt_ctx, "", NULL, NULL) != 0) {
