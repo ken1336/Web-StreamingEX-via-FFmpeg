@@ -9,7 +9,38 @@ OWS_EXPORT __INT_E print_test() {
 	printf("test\n");
 	return 0;
 }
+static int read_packet(void *opaque, uint8_t *buf, int buf_size)
+{
 
+
+	In_packet *bd = (In_packet*)opaque;
+	//printf("buffer ptr: %d		buffer size: %d		buf_size:%d\n", bd->buffer->ptr, bd->buffer->size,buf_size);
+	buf_size = FFMIN(buf_size, bd->size - bd->seek_point);
+
+	if (!buf_size)
+		return AVERROR_EOF;
+	bd->seek_point += buf_size;
+	memcpy(buf, bd->main_buffer, buf_size);
+	
+	bd->main_buffer += buf_size;
+	bd->size -= buf_size;
+	//printf("ptr:%p		pre:%p		size:%d		buf_size: %d\n", bd->buffer->ptr, bd->buffer->pre, bd->buffer->size, buf_size);
+	//if (recv(bd->socket, (char*)bd->buffer->ptr, buf_size, 0) <= 0) {
+	//	return 0;
+	//}
+	///* copy internal buffer data to buf */
+	//memcpy(buf, bd->buffer->ptr, buf_size);
+	//bd->buffer->ptr += buf_size;
+	//bd->buffer->size -= buf_size;
+	//if (bd->buffer->size <= 0) {
+
+	//	printf("buffer ptr move to pre");
+	//	bd->buffer->ptr -= 32 * 1024 * 1024;
+	//	printf("move ptr:	%p	->	%p\n", bd->buffer->ptr, bd->buffer->pre);
+	//	bd->buffer->size = 32 * 1024 * 1024;
+	//}
+	return buf_size;
+}
 int init_context(StreamingContext *st) {
 
 	int ret = 0;
@@ -29,7 +60,7 @@ int init_context(StreamingContext *st) {
 		return ret;
 	}
 
-	//st->avio_ctx_buffer = (uint8_t*)av_malloc(DEFAULT_STREAM_BUFFER_SIZE);
+	st->avio_ctx_buffer = (uint8_t*)av_malloc(DEFAULT_STREAM_BUFFER_SIZE);
 	if (!st->avio_ctx_buffer) {
 		ret = -1;
 		print_log("avio_ctx_buffer alloctaion error!\n");
@@ -37,6 +68,11 @@ int init_context(StreamingContext *st) {
 	}
 
 	st->bd.size = DEFAULT_BUFFER_SIZE;
+
+	//////////////////////////////////////////////////
+	
+	st->avio_ctx = avio_alloc_context(st->avio_ctx_buffer, DEFAULT_BUFFER_SIZE, 0, &st->in_packet, &read_packet, NULL, NULL);
+	st->decode_ctx.in_format_context->pb = st->avio_ctx;
 	return ret;
 }
 
@@ -47,11 +83,18 @@ int stream_proc(void* args) {
 
 	_endthreadex(1);
 }
-OWS_EXPORT __INT_E start_main_thread(uint8_t *buffer, size_t buf_size) {
+OWS_EXPORT __INT_E reset_buffer_index() {
+
+}
+OWS_EXPORT __INT_E start_main_thread(uint8_t *buffer,uint8_t *backBuffer, size_t buf_size) {
 
 	int ret;
 	StreamingContext st;
-	st.avio_ctx_buffer = buffer;
+	st.in_packet.back_buffer = backBuffer;
+	st.in_packet.main_buffer = buffer;
+	st.in_packet.buffer_ref = &buffer;
+	st.in_packet.size = buf_size;
+	//st.in_packet.seek_point = 
 	st.avio_ctx_buffer_size = buf_size;
 	
 	if (ret = init_context(&st) < 0) {

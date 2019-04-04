@@ -48,6 +48,15 @@ enum OWSType {
 	TCP_IO
 };
 
+typedef struct In_packet {
+
+	uint8_t *back_buffer = NULL;
+	uint8_t *main_buffer = NULL;
+	uint8_t **buffer_ref = NULL;
+	int seek_point = 0;
+	int size;
+}in_packet;
+
 typedef struct DecodeContext {
 
 	OWSType IOType;
@@ -93,6 +102,8 @@ typedef struct StreamingContext {
 	unsigned int context_id;
 	unsigned int threadID;
 
+	//
+	In_packet in_packet;
 
 	//Decode proc properties
 	DecodeContext decode_ctx;
@@ -101,6 +112,7 @@ typedef struct StreamingContext {
 	tcpio_stream* stream = NULL;
 	AVIOContext *avio_ctx = NULL;
 	uint8_t *avio_ctx_buffer = NULL;
+	
 	size_t  avio_ctx_buffer_size = DEFAULT_STREAM_BUFFER_SIZE;
 	size_t buffer_size = DEFAULT_BUFFER_SIZE;
 	struct buffer_data bd = { 0 };
@@ -123,11 +135,14 @@ extern "C"
 	OWS_EXPORT __CHARS_E text(char* str);
 	OWS_EXPORT __INT_E start_main_thread();
 	OWS_EXPORT __INT_E print_test();
+	OWS_EXPORT __INT_E reset_buffer_index();
 }
 
 int init_context(StreamingContext *s_cxt);
 
 int stream_proc(void* args);
+int read_packet(void *opaque, uint8_t *buf, int buf_size);
+
 //int read_packet(void *opaque, uint8_t *buf, int buf_size)
 //{
 //

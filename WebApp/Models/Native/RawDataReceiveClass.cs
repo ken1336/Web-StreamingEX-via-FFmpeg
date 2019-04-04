@@ -21,7 +21,7 @@ namespace WebApp.Models.Native
             buffer = new byte[32 * 1024 * 1024];
             Thread StreamIOThread = new Thread(new ThreadStart(Run));
             StreamIOThread.Start();
-            StreamIOThread.Interrupt();
+           // StreamIOThread.Interrupt();
             
         }
         

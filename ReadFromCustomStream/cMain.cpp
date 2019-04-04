@@ -91,12 +91,10 @@ int main(int argc, char *argv[]) {
 	tcpio_stream* stream = custom_tcp_open((char*)"127.0.0.1", 8888,&bd);
 	avio_ctx = avio_alloc_context(*avio_ctx_buffer_ref, buffer_size, 0, stream, &read_packet, NULL, &seek);
 	
-	fmt_ctx->pb = avio_ctx;
+	fmt_ctx->pb = avio_ctx;	
 	/////////////////////////////////
 	printf("			%d	%d\n\n", *avio_ctx_buffer_ref, avio_ctx_buffer);
-	uint8_t* avio_ctx_buffer2 = (uint8_t*)av_malloc(avio_ctx_buffer_size);
-	avio_ctx_buffer_ref = &avio_ctx_buffer2;
-	printf("			%d	%d\n\n", *avio_ctx_buffer_ref, avio_ctx_buffer);
+	
 	
 
 	if (avformat_open_input(&fmt_ctx, "", NULL, NULL) != 0) {
@@ -294,7 +292,9 @@ int main(int argc, char *argv[]) {
 
 	int size = 0;
 	frm = av_frame_alloc();
-	
+	uint8_t* avio_ctx_buffer2 = (uint8_t*)av_malloc(avio_ctx_buffer_size);
+	avio_ctx_buffer_ref = &avio_ctx_buffer2;
+	printf("			%d	%d\n\n", *avio_ctx_buffer_ref, avio_ctx_buffer);
 	while (av_read_frame(fmt_ctx, &pkt) >= 0) {
 		//printf("%d	%d\n", pkt.size, pkt.stream_index);
 		//printf("%d	%d\n", pkt.size,pkt.stream_index);
